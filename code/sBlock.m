@@ -1,4 +1,7 @@
 %% sBlock.m
+%   Calculate the gravitational force of a cuboid shaped mountain block
+%   with the same density and volume as the mountain body described by the
+%   surface grid. The floor area is the same.
 
 % Density of the mountain body in kg/m^3
 density = 2700; 
