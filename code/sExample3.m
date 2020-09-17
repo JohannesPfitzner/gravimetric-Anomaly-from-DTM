@@ -70,14 +70,8 @@ trianglesBot = [trianglesBot(:,2) trianglesBot(:,1) trianglesBot(:,3)];
 
 points = [xTop,yTop,zTop;xBot,yBot,zBot];
 triangles = [trianglesTop; trianglesBot];
-%%
+
 gzMagranaso = fTopographicReductionMagranaso(xObs,yObs,zObs,triangles,points,density);
-
-%% Calculate IGMAS solution
-
-dataIGMAS = csvread('..\Data\calculatedSphereNegDensity.csv',1,0);
-
-gzIGMAS = dataIGMAS(:,4);
 
 %% Calculate GBOX solution
 
