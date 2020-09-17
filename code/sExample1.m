@@ -1,5 +1,6 @@
 %%  sExample1.m
-
+%
+%   @author     Johannes Pfitzner
 
 % Gravitational constant
 gamma = 6.67430*1e-11;

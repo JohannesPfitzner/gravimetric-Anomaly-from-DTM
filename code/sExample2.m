@@ -1,4 +1,6 @@
 %% sExample2.m
+%
+%   @author     Johannes Pfitzner
 
 
 % Resolution factor to coarsen the surface grid

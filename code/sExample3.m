@@ -1,5 +1,8 @@
 %%  sExample3.m     
-%  -- Sphere --
+%  
+%   @author     Johannes Pfitzner
+
+%   -- Sphere --   
 
 % Observation points
 
