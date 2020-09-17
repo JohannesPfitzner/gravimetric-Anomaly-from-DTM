@@ -107,20 +107,24 @@ deltaGSch(4) = 0.0;
 
 % Cavity reduction
 deltaGH = zeros(size(deltaGStr));
-deltaGH(3,:) = gbox(0.0, 0.0, 0.0, -2.8, -1.3, 0.3, 10.8, 1.3, 9.0, -density);
+deltaGH(3,:) = gbox(0.0, 0.0, 0.0, -2.8, -1.3, 0.3, 10.8, 1.3, 9.0, ...
+    -density);
 
 %% Topographic reduction using Magranaso algorithm and layer density
 
 % Topographic reduction
-[xSurf, ySurf, zSurf] = fReadGridFromASC( '..\data\Freiberg_dgm_10m_spac.asc', resFactor);
+[xSurf, ySurf, zSurf] = fReadGridFromASC( ...
+    '..\data\Freiberg_dgm_10m_spac.asc', resFactor);
 
-[triangles, points] = fTriangulateFromSurface(xSurf(:), ySurf(:), zSurf(:));
+[triangles, points] = fTriangulateFromSurface(xSurf(:), ySurf(:), ...
+    zSurf(:));
 
 deltaGTopMagranaso = fTopographicReductionMagranaso(xObs,yObs,hNHN, ...
                                              triangles,points,density);
 
 % Anomaly
-DeltaGMagranaso = gMean + deltaGSch + deltaGStr + deltaGH + deltaGTopMagranaso;
+DeltaGMagranaso = gMean + deltaGSch + deltaGStr + deltaGH + ...
+    deltaGTopMagranaso;
 
 
 % Layer density 
@@ -139,7 +143,8 @@ gamma = 6.67430*1e-11;  % Gravitationskonstante
 g_gamma = 0.3086;   % Normalschweregradient
 
 for i = 1:length(deltaH)
-    densityMagra(i) = 1/(4*pi*1e5*gamma)*(g_gamma - diffDeltaGMagranaso(i)./deltaH(i)); %#ok
+    densityLayerMagra(i) = 1/(4*pi*1e5*gamma)*(g_gamma - ...
+        diffDeltaGMagranaso(i)./deltaH(i)); %#ok
 end
 
 %% Topographic reduction using GBOX algorithm and layer density
@@ -169,7 +174,8 @@ gamma = 6.67430*1e-11;  % Gravitationskonstante
 g_gamma = 0.3086;   % Normalschweregradient
 
 for i = 1:length(deltaH)
-    densityGBOX(i) = 1/(4*pi*1e5*gamma)*(g_gamma - diffDeltaGGBOX(i)./deltaH(i)); %#ok
+    densityLayerGBOX(i) = 1/(4*pi*1e5*gamma)*(g_gamma - ...
+        diffDeltaGGBOX(i)./deltaH(i)); %#ok
 end
 
 

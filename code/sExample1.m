@@ -28,7 +28,8 @@ deltaH = abs([zObs(4)-zObs(3); ...
            zObs(4)-zObs(1)]);
 
 % Load surface grid (from an Esri ASCII raster format-file '.asc')
-[xSurf, ySurf, zSurf] = fReadGridFromASC('..\data\Freiberg_dgm_10m_spac.asc', resFactor);
+[xSurf, ySurf, zSurf] = fReadGridFromASC(...
+    '..\data\Freiberg_dgm_10m_spac.asc', resFactor);
 
 %%  Calculate topographic reduction and layer density using 'Magranaso' (triangles)
 
@@ -50,10 +51,11 @@ deltaGMagranaso = [gzRedMagranaso(4)-gzRedMagranaso(3); ...
                 gzRedMagranaso(4)-gzRedMagranaso(1)];    
 
 for i = 1:length(deltaGMagranaso)
-    densLayerMagranaso(i) = 1/(4*pi*1e5*gamma)*(gGamma - deltaGMagranaso(i)./deltaH(i)); %#ok
+    densLayerMagranaso(i) = 1/(4*pi*1e5*gamma)*(gGamma - ...
+        deltaGMagranaso(i)./deltaH(i)); %#ok
 end
 
-%%  Calculate topographic reduction and layer density using 'GBOX' (pillars)
+%%  Calculate topographic reduction and layer density using 'GBOX'(pillars)
 
 % Calculate topographic reduction
 tic
@@ -70,5 +72,6 @@ deltaGGBOX = [gzRedGBOX(4)-gzRedGBOX(3); ...
                 gzRedGBOX(4)-gzRedGBOX(1)];    
 
 for i = 1:length(deltaGGBOX)
-    densLayerGBOX(i) = 1/(4*pi*1e5*gamma)*(gGamma - deltaGGBOX(i)./deltaH(i)); %#ok
+    densLayerGBOX(i) = 1/(4*pi*1e5*gamma)*(gGamma - deltaGGBOX(i)./ ...
+        deltaH(i)); %#ok
 end
