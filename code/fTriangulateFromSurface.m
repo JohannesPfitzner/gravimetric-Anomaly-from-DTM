@@ -1,6 +1,24 @@
 function [triangles, points] = fTriangulateFromSurface(xSurf, ySurf, zSurf)
 %fTriangulateFromSurface
-%               Detailed explanation goes here
+%                           Creates a body defined by a MxN surface grid 
+%                           (M,N > 1) and a z-plane at the lowest
+%                           surface height.
+%   @input parameters
+%               xSurf, ySurf, zSurf ..  surface grid
+%
+%   @output parameters
+%               triangles           ..  Lx3 Matrix, where L is the number 
+%                                       of triangles. Each row contains the 
+%                                       references to the position in the 
+%                                       'points' list the three points of 
+%                                       each triangle have. (P1,P2,P3)
+%               points              ..  Kx3 Matrix, containing all the
+%                                       triangle points, where K is the 
+%                                       count of points. (x,y,z)
+%
+%   @author     Johannes Pfitzner
+%
+
     ext_x = [min(xSurf) max(xSurf)];
     ext_y = [min(ySurf) max(ySurf)];
     ext_z = [min(zSurf) max(zSurf)];
