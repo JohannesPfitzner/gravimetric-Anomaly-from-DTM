@@ -2,6 +2,11 @@
 %
 %   @author     Johannes Pfitzner
 
+% Gravitational constant
+gamma = 6.67430*1e-11;
+
+% Normal gravity gradient
+gGamma = 0.3086;
 
 % Resolution factor to coarsen the surface grid
 resFactor = 10.0;
@@ -128,7 +133,6 @@ deltaGTopMagranaso = fTopographicReductionMagranaso(xObs,yObs,hNHN, ...
 DeltaGMagranaso = gMean + deltaGSch + deltaGStr + deltaGH + ...
     deltaGTopMagranaso;
 
-
 % Layer density 
 
 diffDeltaGMagranaso = [DeltaGMagranaso(1)-DeltaGMagranaso(2); ... %P0 - P1
@@ -140,12 +144,9 @@ deltaH = abs([hNHN(1)-hNHN(2); ... %P0 - P1
               hNHN(2)-hNHN(3); ... %P1 - P2
               hNHN(3)-hNHN(4); ... %P2 - P3
               hNHN(1)-hNHN(4)]);   %P0 - P3     
-    
-gamma = 6.67430*1e-11;  % Gravitationskonstante 
-g_gamma = 0.3086;   % Normalschweregradient
 
 for i = 1:length(deltaH)
-    densityLayerMagra(i) = 1/(4*pi*1e5*gamma)*(g_gamma - ...
+    densityLayerMagra(i) = 1/(4*pi*1e5*gamma)*(gGamma - ...
         diffDeltaGMagranaso(i)./deltaH(i)); %#ok
 end
 
@@ -156,6 +157,8 @@ end
 deltaGTopGBOX = fTopographicReductionGBOX(xObs,yObs,hNHN,...
                 xSurf,ySurf,zSurf,density);
 
+            deltaGTopGBOX= 0.0;
+            
 % Anomaly
 DeltaGGBOX = gMean + deltaGSch + deltaGStr + deltaGH + deltaGTopGBOX;
 
@@ -171,12 +174,9 @@ deltaH = abs([hNHN(1)-hNHN(2); ... %P0 - P1
               hNHN(2)-hNHN(3); ... %P1 - P2
               hNHN(3)-hNHN(4); ... %P2 - P3
               hNHN(1)-hNHN(4)]);   %P0 - P3     
-    
-gamma = 6.67430*1e-11;  % Gravitationskonstante 
-g_gamma = 0.3086;   % Normalschweregradient
 
 for i = 1:length(deltaH)
-    densityLayerGBOX(i) = 1/(4*pi*1e5*gamma)*(g_gamma - ...
+    densityLayerGBOX(i) = 1/(4*pi*1e5*gamma)*(gGamma - ...
         diffDeltaGGBOX(i)./deltaH(i)); %#ok
 end
 

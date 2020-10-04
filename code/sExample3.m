@@ -6,20 +6,19 @@
 
 % Observation points
 
-xObs = -5000:10:5000;
-yObs = zeros(size(xObs));
-zObs = zeros(size(xObs));
+zObs = -5000:100:5000;
+yObs = zeros(size(zObs));
+xObs = zeros(size(zObs));
 
 % Sphere parameters
 
-density = 2700;
-r = 500.0;
-center = [0,0,1000];
+density = 2700;         % [kg/m^3]
+r = 500.01;             % [m]
+center = [0,0,0];       % [m]
 nPhi = 40;
-%nThetaHalf = 20;
 
 % Create sphere
-
+%nThetaHalf = 20;
 % PHI        = linspace(0, 2*pi, nPhi);
 % THETA_top  = linspace(0, 0.5*pi, nThetaHalf);
 % THETA_bot  = linspace(0.5*pi, pi, nThetaHalf);
@@ -74,7 +73,7 @@ trianglesBot = [trianglesBot(:,2) trianglesBot(:,1) trianglesBot(:,3)];
 points = [xTop,yTop,zTop;xBot,yBot,zBot];
 triangles = [trianglesTop; trianglesBot];
 
-gzMagranaso = fTopographicReductionMagranaso(xObs,yObs,zObs,triangles,points,density);
+gzMagranaso = -fTopographicReductionMagranaso(xObs,yObs,zObs,triangles,points,density);
 
 %% Calculate GBOX solution
 
@@ -91,16 +90,34 @@ corner_2 = center + [-k/2 -k/2 -k/2];
 gzGBOX = zeros(length(xObs),1);
 
 for i = 1:length(xObs)
-    gzGBOX(i) = gbox(xObs(i),yObs(i),zObs(i),...
+    gzGBOX(i) = 0.0;
+    if((zObs(i)<corner_1(3)) && (zObs(i)>corner_2(3)))
+        gzGBOX(i) = gzGBOX(i) + gbox(xObs(i),yObs(i),zObs(i),...
+                           corner_2(1),corner_2(2),corner_2(3),...
+                           corner_1(1),corner_1(2),zObs(i),...
+                           density);
+        gzGBOX(i) = gzGBOX(i) - gbox(xObs(i),yObs(i),zObs(i),...
+                           corner_2(1),corner_2(2),zObs(i),...
+                           corner_1(1),corner_1(2),corner_1(3),...
+                           density);
+    elseif(zObs(i)>=corner_1(3))
+        gzGBOX(i) = gzGBOX(i) - gbox(xObs(i),yObs(i),-zObs(i),...
                            corner_2(1),corner_2(2),corner_2(3),...
                            corner_1(1),corner_1(2),corner_1(3),...
                            density);
+        
+    else
+        gzGBOX(i) = gzGBOX(i) + gbox(xObs(i),yObs(i),zObs(i),...
+                           corner_2(1),corner_2(2),corner_2(3),...
+                           corner_1(1),corner_1(2),corner_1(3),...
+                           density);
+    end
 end
 
 
 %% Calculate volume
 
-VSphere = 3/4 * pi * r^3;
+VSphere = 4/3 * pi * r^3;
 
 VTriangulation = 0.0;
 
@@ -108,5 +125,32 @@ for i = 1:size(triangles,1)
     v1 = points(triangles(i,1),:) - center;
     v2 = points(triangles(i,2),:) - center;
     v3 = points(triangles(i,3),:) - center;
-    VTriangulation = VTriangulation + abs(1/6*dot(cross(v2,v3),v1));
+    VTriangulation = VTriangulation + abs(dot(cross(v2,v3),v1))./6;
 end
+
+diffV = VTriangulation / VSphere * 100; % [%]
+
+%% Plot
+
+fig1 = figure;
+plot(zObs,gz,'k');
+hold on;
+plot(zObs,gzMagranaso,'b');
+%plot(zObs,gzGBOX,'r');
+hold off;
+xlabel('z [m]');
+ylabel('g [mGal]');
+legend('Analytical','Magranaso','GBOX');
+grid on;
+
+fig2 = figure;
+plot(zObs,gzMagranaso./gz*100,'b');
+hold on;
+%plot(zObs,gzGBOX./gz*100,'r');
+yline(diffV,'b--');
+%yline(100,'r--');
+hold off;
+xlabel('z [m]');
+ylabel('diff(g) [%]');
+legend('Analytical - Magranaso V','Analytical - GBOX','Location','SouthEast');
+grid on;

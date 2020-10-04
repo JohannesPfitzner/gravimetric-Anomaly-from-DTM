@@ -153,6 +153,7 @@ function Gzz = fTopographicReductionMagranaso(xObs,yObs,zObs,triangles,Points,de
                        if (r1+b2 ~= 0)
                           I = (1/L).* log((sqrt(L2 + b + r12) + L + b2)./(r1 + b2));
                        end 
+                       
                        s=find((Edge(:,7)==Edge(Eno,8)) & (Edge(:,8) == Edge(Eno,7)));
                        I=I*chsgn; % change sign of I if p1,p2 were interchanged 
                        Edge(Eno,5)=I;
@@ -160,7 +161,8 @@ function Gzz = fTopographicReductionMagranaso(xObs,yObs,zObs,triangles,Points,de
                        Edge(Eno,6)=1;
                        Edge(s,6)=1;
                        pqr=I .* V; 
-                       PQR=PQR+pqr; 
+                       PQR=PQR+pqr;
+ 
                     end 
                  end % From Omega,l,m,n,PQR, get components of field due to 
                  % triangles f

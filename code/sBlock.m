@@ -3,6 +3,12 @@
 %   with the same density and volume as the mountain body described by the
 %   surface grid. The floor area is the same.
 
+% Gravitational constant
+gamma = 6.67430*1e-11;
+
+% Normal gravity gradient
+gGamma = 0.3086;
+
 % Density of the mountain body in kg/m^3
 density = 2700; 
 
@@ -16,6 +22,14 @@ resFactor = 1.0;
 xObs = [384611.4074; 384611.4529; 384611.0635; 384611.4567];
 yObs = [5643139.0488; 5643139.4324; 5643139.3648; 5643139.1835]; 
 zObs = [428.750000; 362.230000; 327.820000; 281.240000];
+
+% Measured 
+gObs = [5617.996; 5625.538; 5629.011; 5633.303];
+
+deltaH = abs([zObs(4)-zObs(3); ... %P0 - P1
+              zObs(3)-zObs(2); ... %P1 - P2
+              zObs(2)-zObs(1); ... %P2 - P3
+              zObs(4)-zObs(1)]);   %P0 - P3   
 
 %% Calculate der volume of the mountain body
 
